@@ -1,41 +1,45 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Oxide.Plugins
 {
     [Info("Unburnable Meat", "S642667", "1.0.0")]
     class UnburnableMeat : RustPlugin
     {
-        public static readonly Dictionary<string, string> UnburntItems = new Dictionary<string, string>()
+        public static readonly string[] CookedItems = new string[]
         {
-            { "bearmeat.burned", "bearmeat.cooked" },
-            { "chicken.burned", "chicken.cooked" },
-            { "deermeat.burned", "deermeat.cooked" },
-            { "horsemeat.burned", "horsemeat.cooked" },
-            { "humanmeat.burned", "humanmeat.cooked" },
-            { "meat.pork.burned", "meat.pork.cooked" },
-            { "wolfmeat.burned", "wolfmeat.cooked" }
+            "bearmeat.cooked",
+            "chicken.cooked",
+            "deermeat.cooked",
+            "horsemeat.cooked",
+            "humanmeat.cooked",
+            "meat.pork.cooked",
+            "wolfmeat.cooked",
+            "fish.cooked"
         };
 
-        Item OnFindBurnable(BaseOven oven)
+        private Dictionary<string, int> lowTemps = new Dictionary<string, int>();
+        private Dictionary<string, int> highTemps = new Dictionary<string, int>();
+
+        void OnServerInitialized()
         {
-            List<Item> toRemove = new List<Item>();
-            foreach (var item in oven.inventory.itemList)
+            foreach (var shortname in CookedItems)
             {
-                if (item.info.shortname == "bearmeat.burned")
-                {
-                    toRemove.Add(item);
-                }
+                var cookable = ItemManager.FindItemDefinition(shortname).GetComponent<ItemModCookable>();
+                lowTemps.Add(shortname, cookable.lowTemp);
+                highTemps.Add(shortname, cookable.highTemp);
+                cookable.lowTemp = -1;
+                cookable.highTemp = -1;
             }
-            foreach (var item in toRemove)
+        }
+
+        void Unload()
+        {
+            foreach (var shortname in CookedItems)
             {
-                item.DoRemove();
-                Item unburnt = ItemManager.CreateByName(UnburntItems[item.info.shortname], 1);
-                if (!unburnt.MoveToContainer(oven.inventory))
-                {
-                    unburnt.Drop(oven.inventory.dropPosition, oven.inventory.dropVelocity);
-                }
+                var cookable = ItemManager.FindItemDefinition(shortname).GetComponent<ItemModCookable>();
+                cookable.lowTemp = lowTemps[shortname];
+                cookable.highTemp = highTemps[shortname];
             }
-            return null;
         }
     }
 }
