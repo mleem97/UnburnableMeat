@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Oxide.Plugins
 {
-    [Info("Unburnable Meat", "S642667", "1.0.0")]
+    [Info("Unburnable Meat", "S642667", "1.0.1")]
     [Description("Prevent cooked meats from burning")]
     class UnburnableMeat : RustPlugin
     {
