@@ -21,7 +21,7 @@ namespace Oxide.Plugins
         private Dictionary<string, int> lowTemps = new Dictionary<string, int>();
         private Dictionary<string, int> highTemps = new Dictionary<string, int>();
 
-        ItemModCookable getCookable (string shortname)
+        ItemModCookable GetCookable (string shortname)
         {
             var definition = ItemManager.FindItemDefinition(shortname);
             if (definition == null)
