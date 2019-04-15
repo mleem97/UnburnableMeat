@@ -42,7 +42,7 @@ namespace Oxide.Plugins
         {
             foreach (var shortname in CookedItems)
             {
-                var cookable = getCookable(shortname);
+                var cookable = GetCookable(shortname);
                 if (cookable == null)
                 {
                     continue;
@@ -58,7 +58,7 @@ namespace Oxide.Plugins
         {
             foreach (KeyValuePair<string, int> item in lowTemps)
             {
-                var cookable = getCookable(item.Key);
+                var cookable = GetCookable(item.Key);
                 if (cookable == null)
                 {
                     continue;
