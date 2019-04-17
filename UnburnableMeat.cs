@@ -26,13 +26,13 @@ namespace Oxide.Plugins
             var definition = ItemManager.FindItemDefinition(shortname);
             if (definition == null)
             {
-                Puts($"Uknown definition for {shortname}");
+                Puts($"Unknown definition for {shortname}");
                 return null;
             }
             var cookable = definition.GetComponent<ItemModCookable>();
             if (cookable == null)
             {
-                Puts($"Uknown cookable for {shortname}");
+                Puts($"Unknown cookable for {shortname}");
                 return null;
             }
             return cookable;
