@@ -160,7 +160,9 @@ namespace Oxide.Plugins
                 ["InfoPermissionRequired"] = "Permission required: <color=#87CEEB>{0}</color>",
                 ["InfoPermissionMode"] = "Permission mode: <color=#87CEEB>{0}</color>",
                 ["ConfigReloaded"] = "<color=#FFA500>[UnburnableMeat]</color> Configuration reloaded!",
-                ["ToggleUseConsole"] = "<color=#FFA500>[UnburnableMeat]</color> Use server console: oxide.reload UnburnableMeat"
+                ["ToggleUseConsole"] = "<color=#FFA500>[UnburnableMeat]</color> Use server console: oxide.reload UnburnableMeat",
+                ["ConflictWarning"] = "COMPATIBILITY WARNING: Detected conflicting plugin '{0}' v{1}",
+                ["ConflictRecommendation"] = "Recommendation: oxide.unload {0} - to prevent compatibility issues"
             }, this);
         }
 
@@ -205,6 +207,52 @@ namespace Oxide.Plugins
             {
                 Puts($"[UnburnableMeat] Error processing item '{shortname}': {ex.Message}");
                 return null;
+            }
+        }
+
+        void CheckForConflictingPlugins()
+        {
+            try
+            {
+                // Check for old UnburnableMeat plugin (different class name or file)
+                var loadedPlugins = Interface.Oxide.RootPluginManager.GetPlugins();
+                
+                foreach (var plugin in loadedPlugins)
+                {
+                    if (plugin == null || plugin == this) continue;
+                    
+                    // Check for old plugin with same functionality but different name/version
+                    if (plugin.Name.ToLower().Contains("unburnablemeat") || 
+                        plugin.Name.ToLower().Contains("unburnable") ||
+                        plugin.Title.ToLower().Contains("unburnablemeat") ||
+                        plugin.Title.ToLower().Contains("unburnable"))
+                    {
+                        PrintWarning($"[UnburnableMeat] COMPATIBILITY WARNING:");
+                        PrintWarning($"[UnburnableMeat] Detected potentially conflicting plugin: '{plugin.Name}' v{plugin.Version}");
+                        PrintWarning($"[UnburnableMeat] It is recommended to unload the old plugin to prevent compatibility issues:");
+                        PrintWarning($"[UnburnableMeat] Use command: oxide.unload {plugin.Name}");
+                        PrintWarning($"[UnburnableMeat] This may cause duplicate functionality or unexpected behavior.");
+                        
+                        // Also log to console with different formatting for visibility
+                        Puts($"=== PLUGIN CONFLICT DETECTED ===");
+                        Puts($"Found: {plugin.Name} v{plugin.Version}");
+                        Puts($"Recommendation: oxide.unload {plugin.Name}");
+                        Puts($"================================");
+                        
+                        if (config?.Settings?.EnableLogging == true)
+                        {
+                            Puts($"[UnburnableMeat] Conflicting plugin details - Name: '{plugin.Name}', Title: '{plugin.Title}', Author: '{plugin.Author}', Version: '{plugin.Version}'");
+                        }
+                        break; // Only warn about first conflict found
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                if (config?.Settings?.EnableLogging == true)
+                {
+                    Puts($"[UnburnableMeat] Error checking for conflicting plugins: {ex.Message}");
+                }
             }
         }
 
@@ -352,6 +400,9 @@ namespace Oxide.Plugins
         void OnServerInitialized()
         {
             LoadConfig();
+            
+            // Check for conflicting plugins first
+            CheckForConflictingPlugins();
             
             // Log plugin and server information
             if (config.Settings.EnableLogging)
