@@ -1,0 +1,21 @@
+{
+  "NoPermission": "Du hast keine Berechtigung für diesen Befehl.",
+  "ChatCommandsDisabled": "Chat-Befehle sind deaktiviert.",
+  "HelpHeader": "<color=#FFA500>[UnburnableMeat]</color> Verfügbare Befehle:",
+  "HelpStatus": "<color=#87CEEB>/um status</color> - Zeigt deinen Schutzstatus an",
+  "HelpInfo": "<color=#87CEEB>/um info</color> - Zeigt Plugin-Informationen an",
+  "HelpReload": "<color=#FF6347>/um reload</color> - Konfiguration neu laden",
+  "HelpToggle": "<color=#FF6347>/um toggle</color> - Plugin ein-/ausschalten",
+  "StatusProtected": "<color=#FFA500>[UnburnableMeat]</color> Dein Fleischbrand-Schutz: <color=#90EE90>GESCHÜTZT</color>",
+  "StatusNotProtected": "<color=#FFA500>[UnburnableMeat]</color> Dein Fleischbrand-Schutz: <color=#FF6347>NICHT GESCHÜTZT</color>",
+  "StatusNeedPermission": "Du benötigst die Berechtigung: <color=#87CEEB>{0}</color>",
+  "StatusProtectedItems": "Geschützte Gegenstände: <color=#87CEEB>{0}</color>",
+  "StatusPermissionMode": "Berechtigungsmodus: <color=#87CEEB>{0}</color>",
+  "InfoHeader": "<color=#FFA500>[UnburnableMeat]</color> Plugin-Informationen:",
+  "InfoVersion": "Version: <color=#87CEEB>{0}</color>",
+  "InfoProtectedItems": "Geschützte Gegenstände: <color=#87CEEB>{0}</color>",
+  "InfoPermissionRequired": "Berechtigung erforderlich: <color=#87CEEB>{0}</color>",
+  "InfoPermissionMode": "Berechtigungsmodus: <color=#87CEEB>{0}</color>",
+  "ConfigReloaded": "<color=#FFA500>[UnburnableMeat]</color> Konfiguration neu geladen!",
+  "ToggleUseConsole": "<color=#FFA500>[UnburnableMeat]</color> Verwende Server-Konsole: oxide.reload UnburnableMeat"
+}

@@ -1,0 +1,21 @@
+{
+  "NoPermission": "No tienes permiso para usar este comando.",
+  "ChatCommandsDisabled": "Los comandos de chat están deshabilitados.",
+  "HelpHeader": "<color=#FFA500>[UnburnableMeat]</color> Comandos disponibles:",
+  "HelpStatus": "<color=#87CEEB>/um status</color> - Mostrar tu estado de protección",
+  "HelpInfo": "<color=#87CEEB>/um info</color> - Mostrar información del plugin",
+  "HelpReload": "<color=#FF6347>/um reload</color> - Recargar configuración",
+  "HelpToggle": "<color=#FF6347>/um toggle</color> - Activar/desactivar plugin",
+  "StatusProtected": "<color=#FFA500>[UnburnableMeat]</color> Tu protección contra quemaduras: <color=#90EE90>PROTEGIDO</color>",
+  "StatusNotProtected": "<color=#FFA500>[UnburnableMeat]</color> Tu protección contra quemaduras: <color=#FF6347>NO PROTEGIDO</color>",
+  "StatusNeedPermission": "Necesitas el permiso: <color=#87CEEB>{0}</color>",
+  "StatusProtectedItems": "Objetos protegidos: <color=#87CEEB>{0}</color>",
+  "StatusPermissionMode": "Modo de permisos: <color=#87CEEB>{0}</color>",
+  "InfoHeader": "<color=#FFA500>[UnburnableMeat]</color> Información del plugin:",
+  "InfoVersion": "Versión: <color=#87CEEB>{0}</color>",
+  "InfoProtectedItems": "Objetos protegidos: <color=#87CEEB>{0}</color>",
+  "InfoPermissionRequired": "Permiso requerido: <color=#87CEEB>{0}</color>",
+  "InfoPermissionMode": "Modo de permisos: <color=#87CEEB>{0}</color>",
+  "ConfigReloaded": "<color=#FFA500>[UnburnableMeat]</color> ¡Configuración recargada!",
+  "ToggleUseConsole": "<color=#FFA500>[UnburnableMeat]</color> Usa la consola del servidor: oxide.reload UnburnableMeat"
+}
