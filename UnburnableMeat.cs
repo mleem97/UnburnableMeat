@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Oxide.Plugins
 {
     [Info("Unburnable Meat", "MLeeM97", "1.3.0")]
-    [Description("Prevent cooked meats from burning with permission support. Originally built by S642667, updated for uMod/Oxide v2.0.6511 compatibility")]
+    [Description("Prevent cooked meats from burning with permission support. Overhaul of Unburnable Meat by S642667, updated for uMod/Oxide v2.0.6511 compatibility")]
     class UnburnableMeat : RustPlugin
     {
         #region Constants
@@ -126,11 +126,20 @@ namespace Oxide.Plugins
             permission.RegisterPermission(PERMISSION_USE, this);
             permission.RegisterPermission(PERMISSION_ADMIN, this);
             
+            // Load configuration first to check if chat commands should be enabled
+            LoadConfig();
+            
             // Register chat commands if enabled
             if (config?.Settings?.EnableChatCommands == true)
             {
                 cmd.AddChatCommand("unburnablemeat", this, "CmdUnburnableMeat");
                 cmd.AddChatCommand("um", this, "CmdUnburnableMeat");
+            }
+            
+            // Log initialization if logging is enabled
+            if (config?.Settings?.EnableLogging == true)
+            {
+                Puts($"[UnburnableMeat] Plugin initialized - Chat commands: {(config.Settings.EnableChatCommands ? "Enabled" : "Disabled")}");
             }
         }
         
@@ -253,6 +262,159 @@ namespace Oxide.Plugins
                 {
                     Puts($"[UnburnableMeat] Error checking for conflicting plugins: {ex.Message}");
                 }
+            }
+        }
+
+        void SetupLanguageFiles()
+        {
+            try
+            {
+                var oxideDir = Interface.Oxide.DataDirectory;
+                var langDir = System.IO.Path.Combine(oxideDir, "lang");
+                
+                // Ensure the lang directory exists
+                if (!System.IO.Directory.Exists(langDir))
+                {
+                    System.IO.Directory.CreateDirectory(langDir);
+                    if (config?.Settings?.EnableLogging == true)
+                    {
+                        Puts($"[UnburnableMeat] Created language directory: {langDir}");
+                    }
+                }
+
+                // Define language files with their content
+                var languageFiles = new Dictionary<string, Dictionary<string, string>>
+                {
+                    ["de"] = new Dictionary<string, string>
+                    {
+                        ["NoPermission"] = "Du hast keine Berechtigung für diesen Befehl.",
+                        ["ChatCommandsDisabled"] = "Chat-Befehle sind deaktiviert.",
+                        ["HelpHeader"] = "<color=#FFA500>[UnburnableMeat]</color> Verfügbare Befehle:",
+                        ["HelpStatus"] = "<color=#87CEEB>/um status</color> - Zeigt deinen Schutzstatus an",
+                        ["HelpInfo"] = "<color=#87CEEB>/um info</color> - Zeigt Plugin-Informationen an",
+                        ["HelpReload"] = "<color=#FF6347>/um reload</color> - Konfiguration neu laden",
+                        ["HelpToggle"] = "<color=#FF6347>/um toggle</color> - Plugin ein-/ausschalten",
+                        ["StatusProtected"] = "<color=#FFA500>[UnburnableMeat]</color> Dein Fleischbrand-Schutz: <color=#90EE90>GESCHÜTZT</color>",
+                        ["StatusNotProtected"] = "<color=#FFA500>[UnburnableMeat]</color> Dein Fleischbrand-Schutz: <color=#FF6347>NICHT GESCHÜTZT</color>",
+                        ["StatusNeedPermission"] = "Du benötigst die Berechtigung: <color=#87CEEB>{0}</color>",
+                        ["StatusProtectedItems"] = "Geschützte Gegenstände: <color=#87CEEB>{0}</color>",
+                        ["StatusPermissionMode"] = "Berechtigungsmodus: <color=#87CEEB>{0}</color>",
+                        ["InfoHeader"] = "<color=#FFA500>[UnburnableMeat]</color> Plugin-Informationen:",
+                        ["InfoVersion"] = "Version: <color=#87CEEB>{0}</color>",
+                        ["InfoProtectedItems"] = "Geschützte Gegenstände: <color=#87CEEB>{0}</color>",
+                        ["InfoPermissionRequired"] = "Berechtigung erforderlich: <color=#87CEEB>{0}</color>",
+                        ["InfoPermissionMode"] = "Berechtigungsmodus: <color=#87CEEB>{0}</color>",
+                        ["ConfigReloaded"] = "<color=#FFA500>[UnburnableMeat]</color> Konfiguration neu geladen!",
+                        ["ToggleUseConsole"] = "<color=#FFA500>[UnburnableMeat]</color> Verwende Server-Konsole: oxide.reload UnburnableMeat",
+                        ["ConflictWarning"] = "KOMPATIBILITÄTSWARNUNG: Konfliktierendes Plugin '{0}' v{1} erkannt",
+                        ["ConflictRecommendation"] = "Empfehlung: oxide.unload {0} - um Kompatibilitätsprobleme zu vermeiden"
+                    },
+                    ["fr"] = new Dictionary<string, string>
+                    {
+                        ["NoPermission"] = "Vous n'avez pas la permission d'utiliser cette commande.",
+                        ["ChatCommandsDisabled"] = "Les commandes de chat sont désactivées.",
+                        ["HelpHeader"] = "<color=#FFA500>[UnburnableMeat]</color> Commandes disponibles:",
+                        ["HelpStatus"] = "<color=#87CEEB>/um status</color> - Afficher votre statut de protection",
+                        ["HelpInfo"] = "<color=#87CEEB>/um info</color> - Afficher les informations du plugin",
+                        ["HelpReload"] = "<color=#FF6347>/um reload</color> - Recharger la configuration",
+                        ["HelpToggle"] = "<color=#FF6347>/um toggle</color> - Activer/désactiver le plugin",
+                        ["StatusProtected"] = "<color=#FFA500>[UnburnableMeat]</color> Votre protection anti-brûlure: <color=#90EE90>PROTÉGÉ</color>",
+                        ["StatusNotProtected"] = "<color=#FFA500>[UnburnableMeat]</color> Votre protection anti-brûlure: <color=#FF6347>NON PROTÉGÉ</color>",
+                        ["StatusNeedPermission"] = "Vous avez besoin de la permission: <color=#87CEEB>{0}</color>",
+                        ["StatusProtectedItems"] = "Objets protégés: <color=#87CEEB>{0}</color>",
+                        ["StatusPermissionMode"] = "Mode de permission: <color=#87CEEB>{0}</color>",
+                        ["InfoHeader"] = "<color=#FFA500>[UnburnableMeat]</color> Informations du plugin:",
+                        ["InfoVersion"] = "Version: <color=#87CEEB>{0}</color>",
+                        ["InfoProtectedItems"] = "Objets protégés: <color=#87CEEB>{0}</color>",
+                        ["InfoPermissionRequired"] = "Permission requise: <color=#87CEEB>{0}</color>",
+                        ["InfoPermissionMode"] = "Mode de permission: <color=#87CEEB>{0}</color>",
+                        ["ConfigReloaded"] = "<color=#FFA500>[UnburnableMeat]</color> Configuration rechargée!",
+                        ["ToggleUseConsole"] = "<color=#FFA500>[UnburnableMeat]</color> Utilisez la console: oxide.reload UnburnableMeat",
+                        ["ConflictWarning"] = "AVERTISSEMENT DE COMPATIBILITÉ: Plugin conflictuel '{0}' v{1} détecté",
+                        ["ConflictRecommendation"] = "Recommandation: oxide.unload {0} - pour éviter les problèmes de compatibilité"
+                    },
+                    ["es"] = new Dictionary<string, string>
+                    {
+                        ["NoPermission"] = "No tienes permiso para usar este comando.",
+                        ["ChatCommandsDisabled"] = "Los comandos de chat están deshabilitados.",
+                        ["HelpHeader"] = "<color=#FFA500>[UnburnableMeat]</color> Comandos disponibles:",
+                        ["HelpStatus"] = "<color=#87CEEB>/um status</color> - Mostrar tu estado de protección",
+                        ["HelpInfo"] = "<color=#87CEEB>/um info</color> - Mostrar información del plugin",
+                        ["HelpReload"] = "<color=#FF6347>/um reload</color> - Recargar configuración",
+                        ["HelpToggle"] = "<color=#FF6347>/um toggle</color> - Activar/desactivar plugin",
+                        ["StatusProtected"] = "<color=#FFA500>[UnburnableMeat]</color> Tu protección anti-quemadura: <color=#90EE90>PROTEGIDO</color>",
+                        ["StatusNotProtected"] = "<color=#FFA500>[UnburnableMeat]</color> Tu protección anti-quemadura: <color=#FF6347>NO PROTEGIDO</color>",
+                        ["StatusNeedPermission"] = "Necesitas el permiso: <color=#87CEEB>{0}</color>",
+                        ["StatusProtectedItems"] = "Objetos protegidos: <color=#87CEEB>{0}</color>",
+                        ["StatusPermissionMode"] = "Modo de permisos: <color=#87CEEB>{0}</color>",
+                        ["InfoHeader"] = "<color=#FFA500>[UnburnableMeat]</color> Información del plugin:",
+                        ["InfoVersion"] = "Versión: <color=#87CEEB>{0}</color>",
+                        ["InfoProtectedItems"] = "Objetos protegidos: <color=#87CEEB>{0}</color>",
+                        ["InfoPermissionRequired"] = "Permiso requerido: <color=#87CEEB>{0}</color>",
+                        ["InfoPermissionMode"] = "Modo de permisos: <color=#87CEEB>{0}</color>",
+                        ["ConfigReloaded"] = "<color=#FFA500>[UnburnableMeat]</color> ¡Configuración recargada!",
+                        ["ToggleUseConsole"] = "<color=#FFA500>[UnburnableMeat]</color> Usa la consola: oxide.reload UnburnableMeat",
+                        ["ConflictWarning"] = "ADVERTENCIA DE COMPATIBILIDAD: Plugin conflictivo '{0}' v{1} detectado",
+                        ["ConflictRecommendation"] = "Recomendación: oxide.unload {0} - para evitar problemas de compatibilidad"
+                    }
+                };
+
+                int filesCreated = 0;
+                int filesUpdated = 0;
+
+                // Create/update language files
+                foreach (var kvp in languageFiles)
+                {
+                    var langCode = kvp.Key;
+                    var translations = kvp.Value;
+                    
+                    try
+                    {
+                        // Register translations with Oxide's language system
+                        lang.RegisterMessages(translations, this, langCode);
+                        
+                        var langFile = System.IO.Path.Combine(langDir, $"{langCode}", $"{Name}.json");
+                        var langSubDir = System.IO.Path.Combine(langDir, langCode);
+                        
+                        // Create language subdirectory if it doesn't exist
+                        if (!System.IO.Directory.Exists(langSubDir))
+                        {
+                            System.IO.Directory.CreateDirectory(langSubDir);
+                        }
+                        
+                        bool fileExists = System.IO.File.Exists(langFile);
+                        
+                        // Write the language file using Oxide's built-in serialization
+                        Interface.Oxide.DataFileSystem.WriteObject($"lang/{langCode}/{Name}", translations);
+                        
+                        if (fileExists)
+                        {
+                            filesUpdated++;
+                        }
+                        else
+                        {
+                            filesCreated++;
+                        }
+                        
+                        if (config?.Settings?.EnableLogging == true)
+                        {
+                            Puts($"[UnburnableMeat] Language file {(fileExists ? "updated" : "created")}: {langCode}");
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        PrintError($"[UnburnableMeat] Failed to create language file for '{langCode}': {ex.Message}");
+                    }
+                }
+                
+                if (config?.Settings?.EnableLogging == true)
+                {
+                    Puts($"[UnburnableMeat] Language setup complete: {filesCreated} files created, {filesUpdated} files updated");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                PrintError($"[UnburnableMeat] Error setting up language files: {ex.Message}");
             }
         }
 
@@ -401,7 +563,10 @@ namespace Oxide.Plugins
         {
             LoadConfig();
             
-            // Check for conflicting plugins first
+            // Setup language files first (uMod compliance)
+            SetupLanguageFiles();
+            
+            // Check for conflicting plugins
             CheckForConflictingPlugins();
             
             // Log plugin and server information
