@@ -1,51 +1,54 @@
-# UnburnableMeat
+# Burned Begone
 
 A modern Rust Oxide/uMod plugin that prevents cooked meat and fish from burning in ovens, with comprehensive permission and configuration support.
 
 ## Features
 
 - **Prevents burning** of all cooked meat and fish items
-- **Permission-based protection** with global or individual modes
+- **Permission-based protection** with global or individual modes  
 - **Configurable item lists** with easy addition/exclusion of items
-- **Multi-language support** with localization files
+- **Automatic language file creation** - No manual setup required
 - **Chat commands** for status checking and administration
 - **Future-proof** with external configuration
-- **Compatible** with all current Rust items including Jungle Update additions
+- **Self-contained** - Creates all necessary files automatically
+- **uMod compliant** - Follows all submission guidelines
 
 ## Installation
 
-1. Download the plugin file `UnburnableMeat.cs`
+1. Download the plugin file `BurnedBegone.cs`
 2. Place it in your `oxide/plugins/` directory
-3. The plugin will auto-generate its configuration file on first load
-4. Restart your server or use `oxide.reload UnburnableMeat`
+3. **That's it!** The plugin automatically creates:
+   - Configuration file (`oxide/config/BurnedBegone.json`)
+   - Language files (`oxide/lang/de/BurnedBegone.json`, `oxide/lang/fr/BurnedBegone.json`)
+4. Restart your server or use `oxide.reload BurnedBegone`
 
 ## Permissions
 
 | Permission | Description |
 |------------|-------------|
-| `unburnablemeat.use` | Allows players to benefit from meat burning protection |
-| `unburnablemeat.admin` | Allows access to admin commands (reload, toggle) |
+| `burnedbegone.use` | Allows players to benefit from meat burning protection |
+| `burnedbegone.admin` | Allows access to admin commands (reload, toggle) |
 
 ### Grant Permissions
 ```
-oxide.grant user <username> unburnablemeat.use
-oxide.grant group <groupname> unburnablemeat.use
-oxide.grant user <admin> unburnablemeat.admin
+oxide.grant user <username> burnedbegone.use
+oxide.grant group <groupname> burnedbegone.use
+oxide.grant user <admin> burnedbegone.admin
 ```
 
 ## Chat Commands
 
 | Command | Permission Required | Description |
 |---------|-------------------|-------------|
-| `/um` or `/unburnablemeat` | None | Show help menu |
-| `/um status` | None | Check your protection status |
-| `/um info` | None | Show plugin information |
-| `/um reload` | `unburnablemeat.admin` | Reload plugin configuration |
-| `/um toggle` | `unburnablemeat.admin` | Instructions for toggling plugin |
+| `/bb` or `/burnedbegone` | None | Show help menu |
+| `/bb status` | None | Check your protection status |
+| `/bb info` | None | Show plugin information |
+| `/bb reload` | `burnedbegone.admin` | Reload plugin configuration |
+| `/bb toggle` | `burnedbegone.admin` | Instructions for toggling plugin |
 
 ## Configuration
 
-The plugin creates a configuration file at `oxide/config/UnburnableMeat.json`:
+The plugin automatically creates a configuration file at `oxide/config/BurnedBegone.json`:
 
 ```json
 {
@@ -53,30 +56,17 @@ The plugin creates a configuration file at `oxide/config/UnburnableMeat.json`:
     "Enable Logging": true,
     "Require Permission": false,
     "Permission Mode": "global",
-    "Enable Chat Commands": true
+    "Enable Chat Commands": true,
+    "Auto Create Language Files": true
   },
-  "Default Cooked Items": [
-    "bearmeat.cooked",
-    "chicken.cooked",
-    "deermeat.cooked",
-    "horsemeat.cooked",
-    "humanmeat.cooked",
-    "meat.pork.cooked",
-    "wolfmeat.cooked",
-    "fish.cooked",
-    "bigcatmeat.cooked",
-    "crocodilemeat.cooked",
-    "snakemeat.cooked",
-    "fish.anchovy.cooked",
-    "fish.catfish.cooked",
-    "fish.herring.cooked",
-    "fish.salmon.cooked",
-    "fish.sardine.cooked",
-    "fish.smallshark.cooked",
-    "fish.troutsmall.cooked",
-    "fish.yellowperch.cooked",
-    "meat.boar.cooked",
-    "cactusflesh.cooked"
+  "Protected Items": [
+    "bearmeat.cooked", "chicken.cooked", "deermeat.cooked", 
+    "horsemeat.cooked", "humanmeat.cooked", "meat.pork.cooked", 
+    "wolfmeat.cooked", "fish.cooked", "bigcatmeat.cooked", 
+    "crocodilemeat.cooked", "snakemeat.cooked", "fish.anchovy.cooked", 
+    "fish.catfish.cooked", "fish.herring.cooked", "fish.salmon.cooked", 
+    "fish.sardine.cooked", "fish.smallshark.cooked", "fish.troutsmall.cooked", 
+    "fish.yellowperch.cooked", "meat.boar.cooked", "cactusflesh.cooked"
   ],
   "Additional Items": [],
   "Excluded Items": []
@@ -91,7 +81,8 @@ The plugin creates a configuration file at `oxide/config/UnburnableMeat.json`:
   - `"global"`: All items are protected server-wide when any player has permission
   - `"individual"`: Protection only applies when individual players with permission cook items
 - **Enable Chat Commands**: Enable/disable chat command functionality
-- **Default Cooked Items**: List of items protected by default
+- **Auto Create Language Files**: Automatically create language files for supported languages
+- **Protected Items**: List of items protected by default
 - **Additional Items**: Add custom items to protect
 - **Excluded Items**: Remove specific items from protection
 
@@ -130,16 +121,14 @@ The plugin protects all current cooked meat and fish items, including:
 
 ## Localization
 
-The plugin supports multiple languages. Language files are located in `oxide/lang/`:
+The plugin **automatically creates** language files when first loaded. No manual setup required!
 
-### Available Languages
-- **English** (default)
-- **German** (`de.json`)
-- **French** (`fr.json`)
-- **Spanish** (`es.json`)
-- **Italian** (`it.json`)
-- **Dutch** (`nl.json`)
-- **Portuguese** (`pt.json`)
+### Automatically Created Languages
+- **English** (built-in)
+- **German** (`oxide/lang/de/BurnedBegone.json`)
+- **French** (`oxide/lang/fr/BurnedBegone.json`)
+
+Language files are created automatically in the correct Oxide directory structure.
 
 ### Setting Player Language
 Players can set their language using:
@@ -153,22 +142,22 @@ Example: `oxide.lang de SomePlayer` (sets German for SomePlayer)
 
 | Command | Description |
 |---------|-------------|
-| `oxide.reload UnburnableMeat` | Reload the plugin |
-| `oxide.unload UnburnableMeat` | Unload the plugin |
-| `oxide.load UnburnableMeat` | Load the plugin |
+| `oxide.reload BurnedBegone` | Reload the plugin |
+| `oxide.unload BurnedBegone` | Unload the plugin |
+| `oxide.load BurnedBegone` | Load the plugin |
 
 ## Troubleshooting
 
 ### Plugin Not Working
 1. Check if the plugin is loaded: `oxide.plugins`
-2. Verify configuration file exists: `oxide/config/UnburnableMeat.json`
+2. Verify configuration file exists: `oxide/config/BurnedBegone.json`
 3. Check console for errors during plugin load
 4. Ensure you have the latest Oxide/uMod version
 
 ### Permission Issues
 1. Verify permissions are granted correctly
 2. Check permission mode in configuration
-3. Use `/um status` to check protection status
+3. Use `/bb status` to check protection status
 4. Review console logs for permission-related messages
 
 ### Items Still Burning
