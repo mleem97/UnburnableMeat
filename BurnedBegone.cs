@@ -70,12 +70,53 @@ namespace Oxide.Plugins
         protected override void LoadConfig()
         {
             base.LoadConfig();
+            bool configUpdated = false;
+            
             try
             {
                 config = Config.ReadObject<Configuration>();
                 if (config == null)
                 {
                     throw new JsonException();
+                }
+                
+                // Check if config needs updating with new fields
+                var defaultConfig = new Configuration();
+                
+                // Check for missing settings
+                if (config.Settings == null)
+                {
+                    config.Settings = defaultConfig.Settings;
+                    configUpdated = true;
+                }
+                
+                // Check for missing arrays (set to default if null)
+                if (config.ProtectedItems == null)
+                {
+                    config.ProtectedItems = defaultConfig.ProtectedItems;
+                    configUpdated = true;
+                }
+                
+                if (config.AdditionalItems == null)
+                {
+                    config.AdditionalItems = defaultConfig.AdditionalItems;
+                    configUpdated = true;
+                }
+                
+                if (config.ExcludedItems == null)
+                {
+                    config.ExcludedItems = defaultConfig.ExcludedItems;
+                    configUpdated = true;
+                }
+                
+                // Save updated config if changes were made
+                if (configUpdated)
+                {
+                    SaveConfig();
+                    if (config.Settings?.EnableLogging == true)
+                    {
+                        Puts("[BurnedBegone] Configuration updated with new fields");
+                    }
                 }
             }
             catch
@@ -333,15 +374,17 @@ namespace Oxide.Plugins
                     }
                 };
 
+                int updatedLanguages = 0;
                 foreach (var kvp in languages)
                 {
+                    // Always register/update language messages - Oxide handles missing keys automatically
                     lang.RegisterMessages(kvp.Value, this, kvp.Key);
-                    // Language files are automatically created by Oxide when messages are registered
+                    updatedLanguages++;
                 }
                 
                 if (config.Settings.EnableLogging)
                 {
-                    Puts($"[BurnedBegone] Created language files for {languages.Count} languages");
+                    Puts($"[BurnedBegone] Updated language files for {updatedLanguages} languages");
                 }
             }
             catch (System.Exception ex)
