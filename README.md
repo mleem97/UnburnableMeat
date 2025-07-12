@@ -1,6 +1,6 @@
 # Burned Begone
 
-A modern Rust Oxide/uMod plugin that prevents cooked meat and fish from burning in ovens, with comprehensive permission and configuration support.
+A Rust uMod/Oxide plugin that prevents cooked meat and fish from burning in ovens, furnaces, and campfires.
 
 ## Features
 
@@ -29,14 +29,14 @@ A modern Rust Oxide/uMod plugin that prevents cooked meat and fish from burning 
 | `burnedbegone.use` | Allows players to benefit from meat burning protection |
 | `burnedbegone.admin` | Allows access to admin commands (reload, toggle) |
 
-### Grant Permissions
+### Grant Permission Examples
 ```
 oxide.grant user <username> burnedbegone.use
 oxide.grant group <groupname> burnedbegone.use
 oxide.grant user <admin> burnedbegone.admin
 ```
 
-## Chat Commands
+## Commands
 
 | Command | Permission Required | Description |
 |---------|-------------------|-------------|
@@ -75,8 +75,8 @@ The plugin automatically creates a configuration file at `oxide/config/BurnedBeg
 
 ### Configuration Options
 
-- **Enable Logging**: Enable/disable console logging
-- **Require Permission**: Whether players need permission to benefit from protection
+- **Enable Logging**: Show detailed console output (default: `true`)
+- **Require Permission**: Enable permission-based protection (default: `false`)
 - **Permission Mode**: 
   - `"global"`: All items are protected server-wide when any player has permission
   - `"individual"`: Protection only applies when individual players with permission cook items
@@ -86,38 +86,40 @@ The plugin automatically creates a configuration file at `oxide/config/BurnedBeg
 - **Additional Items**: Add custom items to protect
 - **Excluded Items**: Remove specific items from protection
 
-## Protected Items
+## Usage Examples
 
-The plugin protects all current cooked meat and fish items, including:
+### For All Players (Default)
+Set `"Require Permission": false` - all players get protection automatically.
 
-### Original Items
-- Bear Meat (Cooked)
-- Chicken (Cooked)
-- Deer Meat (Cooked)
-- Horse Meat (Cooked)
-- Human Meat (Cooked)
-- Pork (Cooked)
-- Wolf Meat (Cooked)
-- Fish (Cooked)
+### VIP/Donor Only
+```json
+{
+  "Plugin Settings": {
+    "Require Permission": true,
+    "Permission Mode": "global"
+  }
+}
+```
+Then grant permission: `oxide.grant group vip unburnablemeat.use`
 
-### Jungle Update Items (2025)
-- Big Cat Meat (Cooked)
-- Crocodile Meat (Cooked)
-- Snake Meat (Cooked)
+### Adding Custom Items
+```json
+{
+  "Additional Items": [
+    "customfood.cooked",
+    "moddedfish.cooked"
+  ]
+}
+```
 
-### Fish Varieties
-- Anchovy (Cooked)
-- Catfish (Cooked)
-- Herring (Cooked)
-- Salmon (Cooked)
-- Sardine (Cooked)
-- Small Shark (Cooked)
-- Small Trout (Cooked)
-- Yellow Perch (Cooked)
-
-### Other Items
-- Boar Meat (Cooked)
-- Cactus Flesh (Cooked)
+### Excluding Specific Items
+```json
+{
+  "Excluded Items": [
+    "humanmeat.cooked"
+  ]
+}
+```
 
 ## Localization
 
@@ -161,41 +163,48 @@ Example: `oxide.lang de SomePlayer` (sets German for SomePlayer)
 4. Review console logs for permission-related messages
 
 ### Items Still Burning
-1. Check if the item is in the protected items list
-2. Verify the item shortname is correct
-3. Check if the item is in the excluded items list
-4. Ensure individual permission mode is working correctly
+1. Check if item is in "Excluded Items" list
+2. Verify permission settings if using permission mode
+3. Confirm item shortname exists in current Rust version
 
-### Chat Commands Not Working
-1. Verify "Enable Chat Commands" is true in config
-2. Check if player has required permissions
-3. Try reloading the plugin configuration
-
-## Developer Information
-
-- **Author**: MLeeM97
-- **Version**: 1.3.0
-- **Compatibility**: Oxide/uMod 2.0.6511+
-- **Rust Protocol**: Current
-- **Original Author**: S642667
-
-## Version History
-
-### 1.3.0
-- Complete rewrite for modern Oxide/uMod compatibility
-- Added permission system with global/individual modes
-- Implemented external configuration system
-- Added chat commands for user interaction
-- Multi-language support with localization
-- Added all current Rust cooked items including Jungle Update
-- Future-proof design with configurable item lists
-
-### Previous Versions
-- Legacy versions by S642667
+### Permission Issues
+1. Verify permission is granted: `oxide.show user <steamid>`
+2. Check permission mode setting in config
+3. Ensure `"Require Permission": true` if using permissions
 
 ## Support
 
-For support, issues, or feature requests, please visit the plugin page on uMod.org or create an issue in the GitHub repository.
+- **GitHub**: [Report Issues](https://github.com/your-repo/UnburnableMeat/issues)
+- **Discord**: Join uMod Discord for support
+- **Forum**: Post on uMod forums
+
+## Changelog
+
+### v1.3.0
+- Added permission system
+- External configuration file
+- Multi-language support
+- Chat commands
+- Performance optimizations
+- uMod guidelines compliance
+
+### v1.2.0
+- Updated for uMod/Oxide v2.0.6511
+- Added Jungle Update items
+- Improved error handling
+
+### v1.1.0
+- Added fish varieties
+- Updated for modern Rust versions
+
+### v1.0.1
+- Original version by S642667
+
+## Credits
+
+- **Original Author**: S642667
+- **Updated by**: MLeeM97
+- **Inspired by**: Community feedback and requests
 
 ## License
 
