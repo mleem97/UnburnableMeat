@@ -19,7 +19,7 @@ A Rust uMod/Oxide plugin that prevents cooked meat and fish from burning in oven
 2. Place it in your `oxide/plugins/` directory
 3. **That's it!** The plugin automatically creates:
    - Configuration file (`oxide/config/BurnedBegone.json`)
-   - Language files (`oxide/lang/de/BurnedBegone.json`, `oxide/lang/fr/BurnedBegone.json`)
+   - Language support for German and French
 4. Restart your server or use `oxide.reload BurnedBegone`
 
 ## Permissions
@@ -40,7 +40,7 @@ oxide.grant user <admin> burnedbegone.admin
 
 | Command | Permission Required | Description |
 |---------|-------------------|-------------|
-| `/bb` or `/burnedbegone` | None | Show help menu |
+| `/bb` or `/burned_begone` | None | Show help menu |
 | `/bb status` | None | Check your protection status |
 | `/bb info` | None | Show plugin information |
 | `/bb reload` | `burnedbegone.admin` | Reload plugin configuration |
@@ -100,7 +100,7 @@ Set `"Require Permission": false` - all players get protection automatically.
   }
 }
 ```
-Then grant permission: `oxide.grant group vip unburnablemeat.use`
+Then grant permission: `oxide.grant group vip burnedbegone.use`
 
 ### Adding Custom Items
 ```json
@@ -123,14 +123,14 @@ Then grant permission: `oxide.grant group vip unburnablemeat.use`
 
 ## Localization
 
-The plugin **automatically creates** language files when first loaded. No manual setup required!
+The plugin **automatically registers** language support when first loaded. No manual setup required!
 
-### Automatically Created Languages
+### Supported Languages
 - **English** (built-in)
-- **German** (`oxide/lang/de/BurnedBegone.json`)
-- **French** (`oxide/lang/fr/BurnedBegone.json`)
+- **German** (automatically available)
+- **French** (automatically available)
 
-Language files are created automatically in the correct Oxide directory structure.
+Language messages are automatically registered with Oxide's language system.
 
 ### Setting Player Language
 Players can set their language using:
