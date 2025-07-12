@@ -3,11 +3,12 @@
     "Enable Logging": true,
     "Require Permission": false,
     "Permission Mode": "global",
-    "Enable Chat Commands": true
+    "Enable Chat Commands": true,
+    "Auto Create Language Files": true
   },
-  "Default Cooked Items": [
+  "Protected Items": [
     "bearmeat.cooked",
-    "chicken.cooked",
+    "chicken.cooked", 
     "deermeat.cooked",
     "horsemeat.cooked",
     "humanmeat.cooked",
