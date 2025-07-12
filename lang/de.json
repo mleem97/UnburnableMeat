@@ -17,5 +17,7 @@
   "InfoPermissionRequired": "Berechtigung erforderlich: <color=#87CEEB>{0}</color>",
   "InfoPermissionMode": "Berechtigungsmodus: <color=#87CEEB>{0}</color>",
   "ConfigReloaded": "<color=#FFA500>[UnburnableMeat]</color> Konfiguration neu geladen!",
-  "ToggleUseConsole": "<color=#FFA500>[UnburnableMeat]</color> Verwende Server-Konsole: oxide.reload UnburnableMeat"
+  "ToggleUseConsole": "<color=#FFA500>[UnburnableMeat]</color> Verwende Server-Konsole: oxide.reload UnburnableMeat",
+  "ConflictWarning": "KOMPATIBILITÄTSWARNUNG: Konfliktierendes Plugin '{0}' v{1} erkannt",
+  "ConflictRecommendation": "Empfehlung: oxide.unload {0} - um Kompatibilitätsprobleme zu vermeiden"
 }
