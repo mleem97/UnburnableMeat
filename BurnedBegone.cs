@@ -80,7 +80,7 @@ namespace Oxide.Plugins
             }
             catch
             {
-                LogWarning($"Configuration file {Name}.json is invalid; using defaults");
+                PrintWarning($"Configuration file {Name}.json is invalid; using defaults");
                 LoadDefaultConfig();
                 SaveConfig();
             }
@@ -113,12 +113,6 @@ namespace Oxide.Plugins
             if (config.Settings.AutoCreateLanguageFiles)
             {
                 SetupLanguageFiles();
-            }
-            
-            if (config.Settings.EnableChatCommands)
-            {
-                cmd.AddChatCommand("burnedbegone", this, "CmdBurnedBegone");
-                cmd.AddChatCommand("bb", this, "CmdBurnedBegone");
             }
             
             CheckForConflictingPlugins();
@@ -261,7 +255,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                var loadedPlugins = Interface.Oxide.RootPluginManager.GetPlugins();
+                var loadedPlugins = plugins.GetAll();
                 
                 foreach (var plugin in loadedPlugins)
                 {
@@ -342,7 +336,7 @@ namespace Oxide.Plugins
                 foreach (var kvp in languages)
                 {
                     lang.RegisterMessages(kvp.Value, this, kvp.Key);
-                    Interface.Oxide.DataFileSystem.WriteObject($"lang/{kvp.Key}/{Name}", kvp.Value);
+                    // Language files are automatically created by Oxide when messages are registered
                 }
                 
                 if (config.Settings.EnableLogging)
@@ -365,7 +359,7 @@ namespace Oxide.Plugins
             if (!config.Settings.RequirePermission || config.Settings.PermissionMode != "individual")
                 return null;
 
-            var player = oven.GetOwnerPlayer();
+            var player = BasePlayer.FindByID(oven.OwnerID);
             if (player == null || !permission.UserHasPermission(player.UserIDString, PERMISSION_USE))
                 return null;
 
@@ -386,8 +380,7 @@ namespace Oxide.Plugins
         
         #region Chat Commands
 
-        [ChatCommand("burnedbegone")]
-        [ChatCommand("bb")]
+        [ChatCommand("burned_begone")]
         void CmdBurnedBegone(BasePlayer player, string command, string[] args)
         {
             if (!config.Settings.EnableChatCommands)
@@ -430,6 +423,19 @@ namespace Oxide.Plugins
                     ShowHelp(player);
                     break;
             }
+        }
+
+        [ChatCommand("bb")]
+        void CmdBb(BasePlayer player, string command, string[] args)
+        {
+            if (!config.Settings.EnableChatCommands)
+            {
+                SendReply(player, Lang("ChatCommandsDisabled", player.UserIDString));
+                return;
+            }
+            
+            // Redirect to main command handler
+            CmdBurnedBegone(player, command, args);
         }
 
         void ShowHelp(BasePlayer player)
