@@ -174,7 +174,7 @@ Example: `oxide.lang de SomePlayer` (sets German for SomePlayer)
 
 ## Support
 
-- **GitHub**: [Report Issues](https://github.com/your-repo/UnburnableMeat/issues)
+- **GitHub**: [Report Issues](https://github.com/mleeem97/UnburnableMeat/issues)
 - **Discord**: Join uMod Discord for support
 - **Forum**: Post on uMod forums
 
